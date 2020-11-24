@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html>
 
 <head>
@@ -30,8 +30,8 @@
             <hr />
             <p>
                 <input type="text" v-model="searchKeyword" placeholder="Search">
-                <button @click="searchCustomers">Go</button>
-                <button v-show="searchKeyword !== ''" @click="getCustomers">All</button>
+                <button @click="searchStudents">Go</button>
+                <button v-show="searchKeyword !== ''" @click="getStudents">All</button>
             </p>
             <table>
                 <thead>
@@ -42,38 +42,50 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(customer,index) in customers">
-                        <td>{{customer.id}}</td>
-                        <td><a href="#" @click="getCustomer(index)">{{customer.firstName}} {{customer.lastName}}</a>
+                    <tr v-for="(students,index) in students">
+
+                        <td>{{student.id}}</td>
+                        <td><a href="#" @click="getStudents(index)">{{student.firstName}} {{student.lastName}}</a>
                         </td>
-                        <td>{{customer.email}}</td>
-                        <td>{{customer.phone}}</td>
+                        <td>{{student.gender}}</td>
+                        <td>{{student.civilStatus}}</td>
+                        <td>{{student.schoolLastAttended}}</td>
+                        <td>{{student.courseId}}</td>
+
                         <td>
-                            <button @click="editCustomer(index)">Edit</button>
-                            <button @click="deleteCustomer(index)">Delete</button>
+                            <button @click="editStudent(index)">Edit</button>
+                            <button @click="deleteStudent(index)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
-        <form v-show="view === 'newform'" @submit.prevent="postCustomer" autocomplete="off">
+        <form v-show="view === 'newform'" @submit.prevent="postStudent" autocomplete="off">
             <h2>New</h2>
-            <p>
-                <label>Last name</label>
-                <input type="text" v-model="newItem.lastName" required />
-            </p>
             <p>
                 <label>First name</label>
                 <input type="text" v-model="newItem.firstName" required />
             </p>
             <p>
-                <label>Email</label>
-                <input type="text" v-model="newItem.email" />
+                <label>Last name</label>
+                <input type="text" v-model="newItem.lastName" required />
             </p>
             <p>
-                <label>Phone</label>
-                <input type="text" v-model="newItem.phone" />
+                <label>Gender</label>
+                <input type="text" v-model="newItem.gender" />
+            </p>
+            <p>
+                <label>Civil Status</label>
+                <input type="text" v-model="newItem.civilStatus" />
+            </p>
+            <p>
+                <label>School Last Graduated</label>
+                <input type="text" v-model="newItem.schoolLastAttended" />
+            </p>
+            <p>
+                <label>Course</label>
+                <input type="text" v-model="newItem.courseId" />
             </p>
             <p>
                 <button type="button" @click="display('tablelist')">Cancel</button>
@@ -81,27 +93,35 @@
             </p>
         </form>
 
-        <form v-show="view === 'editform'" @submit.prevent="updateCustomer" autocomplete="off">
+        <form v-show="view === 'editform'" @submit.prevent="updateStudent" autocomplete="off">
             <h2>Edit</h2>
             <p>
                 <label>Id</label>
                 <input type="text" v-model="editItem.id" readonly />
             </p>
             <p>
-                <label>Last name</label>
-                <input type="text" v-model="editItem.lastName" required />
-            </p>
-            <p>
                 <label>First name</label>
                 <input type="text" v-model="editItem.firstName" required />
             </p>
             <p>
-                <label>Email</label>
-                <input type="text" v-model="editItem.email" />
+                <label>Last name</label>
+                <input type="text" v-model="editItem.lastName" required />
             </p>
             <p>
-                <label>Phone</label>
-                <input type="text" v-model="editItem.phone" />
+                <label>Gender</label>
+                <input type="text" v-model="editItem.gender" />
+            </p>
+            <p>
+                <label>Civil Status</label>
+                <input type="text" v-model="editItem.civilStatus" />
+            </p>
+            <p>
+                <label>School Last Graduated</label>
+                <input type="text" v-model="editItem.schoolLastAttended" />
+            </p>
+            <p>
+                <label>Course</label>
+                <input type="text" v-model="editItem.courseId" />
             </p>
             <p>
                 <button type="button" @click="display('tablelist')">Cancel</button>
@@ -115,14 +135,18 @@
             <dl>
                 <dt>Id</dt>
                 <dd>{{detailItem.id}}</dd>
-                <dt>Last Name</dt>
-                <dd>{{detailItem.lastName}}</dd>
                 <dt>First Name</dt>
                 <dd>{{detailItem.firstName}}</dd>
-                <dt>Email</dt>
-                <dd>{{detailItem.email}}</dd>
-                <dt>Phone</dt>
-                <dd>{{detailItem.phone}}</dd>
+                <dt>Last Name</dt>
+                <dd>{{detailItem.lastName}}</dd>
+                <dt>Gender</dt>
+                <dd>{{detailItem.gender}}</dd>
+                <dt>Civil Status</dt>
+                <dd>{{detailItem.civilStatus}}</dd>
+                <dt>School Last Graduated</dt>
+                <dd>{{detailItem.schoolLastAttended}}</dd>
+                <dt>Course</dt>
+                <dd>{{detailItem.courseId}}</dd>
                 <dt>More Fields</dt>
                 <dd>More Data</dd>
             </dl>
@@ -138,10 +162,10 @@
         var contactApp = new Vue({
             el: '#customerApp',
             data: {
-                baseUrl: "http://bernardgabon.somee.com",
-                appName: "Customer Barebone Webapp",
-                columnHeader: ['Id', 'Name', 'Email', 'Phone', 'Action'],
-                customers: [],
+                baseUrl: "http://christianbasibasi10.somee.com",
+                appName: "Student Web App",
+                columnHeader: ['Id', 'StudentId','SubjectId', 'P1Grade', 'P2Grade','P3Grade', 'Action'],
+                students: [],
                 newItem: {},
                 editItem: {},
                 detailItem: {},
@@ -152,69 +176,69 @@
                 display: function (v) {
                     this.view = v;
                 },
-                getCustomers: function () {
-                    axios.get(this.baseUrl + "/api/customer")
+                getStudents: function () {
+                    axios.get(this.baseUrl + "/api/students")
                         .then(response => {
-                            this.customers = response.data;
+                            this.students = response.data;
                             this.searchKeyword = '';
                         });
                 },
-                postCustomer: function () {
-                    axios.post(this.baseUrl + "/api/customer", this.newItem)
+                postStudent: function () {
+                    axios.post(this.baseUrl + "/api/students", this.newItem)
                         .then(response => {
                             //alert('Successfully added. Data: ' + JSON.stringify(response.data));
-                            this.getCustomers();
+                            this.getStudents();
                             this.view = "tablelist";
                             this.newItem = {};
                         });
                 },
-                editCustomer: function (index) {
-                    axios.get(this.baseUrl + "/api/customer/" + this.customers[index].id)
+                editStudent: function (index) {
+                    axios.get(this.baseUrl + "/api/students/" + this.students[index].id)
                         .then(response => {
                             this.editItem = response.data;
                             this.view = 'editform';
                         });
                 },
-                updateCustomer: function () {
-                    axios.put(this.baseUrl + "/api/customer", this.editItem)
+                updateStudent: function () {
+                    axios.put(this.baseUrl + "/api/students", this.editItem)
                         .then(response => {
-                            this.getCustomers();
+                            this.getStudents();
                             this.view = "tablelist";
                             this.editItem = {};
                         });
                 },
-                deleteCustomer: function (index) {
+                deleteStudent: function (index) {
                     var yes = confirm('Are you sure?');
                     if (yes) {
-                        axios.delete(this.baseUrl + "/api/customer/" + this.customers[index].id)
+                        axios.delete(this.baseUrl + "/api/students/" + this.students[index].id)
                             .then(response => {
-                                this.getCustomers();
+                                this.getStudents();
                             });
                     }
                 },
-                getCustomer: function (index) {
-                    this.detailItem = this.customers[index];
-                    axios.get(this.baseUrl + "/api/customer/" + this.detailItem.id)
+                getStudents: function (index) {
+                    this.detailItem = this.students[index];
+                    axios.get(this.baseUrl + "/api/students/" + this.detailItem.id)
                         .then(response => {
                             this.detailItem = response.data;
-                            this.customers[index] = response.data;
+                            this.students[index] = response.data;
                             this.view = "detailview";
                         });
                 },
-                searchCustomers: function () {
+                searchStudents: function () {
                     if (this.searchKeyword) {
-                        axios.get(this.baseUrl + "/api/customer?keyword=" + this.searchKeyword)
+                        axios.get(this.baseUrl + "/api/students?keyword=" + this.searchKeyword)
                             .then(response => {
-                                this.customers = response.data;
+                                this.students = response.data;
                             });
                     }
                     else {
-                        this.getCustomers();
+                        this.getStudents();
                     }
                 }
             },
             mounted: function () {
-                this.getCustomers();
+                this.getStudents();
             }
         });
 
